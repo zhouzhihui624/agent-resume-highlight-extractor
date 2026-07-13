@@ -1,4 +1,4 @@
-# Agent Resume Highlight Extractor
+# AI Agent 简历亮点提取器
 
 一个面向 AI 应用开发、AI Agent 和大模型工程项目的 Codex Skill。它会先核对仓库中的真实证据，再提炼能够写进简历、也经得住面试追问的项目亮点。
 
@@ -19,6 +19,7 @@
 ├── agents/openai.yaml                    # 展示信息和默认提示词
 ├── evals/evals.json                      # 行为评测用例
 ├── evals/trigger-queries.json            # 触发与不触发样例
+├── scripts/validate_saved_package.sh      # 深挖文档包结构校验
 └── references/
     ├── evidence-and-theme-guide.md        # 证据审查与亮点筛选指南
     └── output-recipes.md                  # 简历、STAR 和文档包输出模板
@@ -57,6 +58,8 @@ AI 应用开发实习生简历的亮点。每个亮点需要包含简历一句�
 3. **不虚构结果**：不编造指标、规模、上线状态、业务收益和个人所有权。
 4. **宁缺毋滥**：不为满足数量要求而保留重复或薄弱亮点。
 5. **讲得清才算掌握**：先解释问题和完整流程，再介绍术语、底层机制与面试表达。
+6. **缩小范围，不降低深度**：实习生亮点应收敛到可信模块，同时保留状态、失败和工程取舍。
+7. **事实边界不能升级**：同进程不等于分布式，建议不等于门禁，候选制品不等于已验证结果。
 
 ## 适用边界
 

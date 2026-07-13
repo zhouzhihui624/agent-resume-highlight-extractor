@@ -1,4 +1,4 @@
 interface:
-  display_name: "AI Agent Resume Highlights"
-  short_description: "Build defensible AI/LLM resume and interview stories"
-  default_prompt: "Use $agent-resume-highlight-extractor to inspect the project evidence, select only defensible AI/Agent highlights, and explain them progressively in beginner-readable language without inventing ownership or metrics."
+  display_name: "AI Agent 简历亮点提取"
+  short_description: "生成可信、适合实习生的 AI 项目与面试亮点"
+  default_prompt: "使用 $agent-resume-highlight-extractor 检查项目证据，把学生或实习生的个人贡献收敛到可信模块，并从生命周期、状态、失败、取舍和面试表达等角度深入讲解入选亮点，不虚构指标。"

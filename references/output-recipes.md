@@ -1,38 +1,39 @@
-# Output Recipes
+# 输出模板
 
-Read this reference when producing resume bullets, STAR stories, role/JD tailoring, or saved documents. Use only the recipe matching the user's request.
+生成简历内容、STAR 故事、岗位或 JD 定制版本以及保存文档时读取本指南。只使用与用户请求匹配的模板。
 
-## Contents
+## 目录
 
-- [Bullets Only](#bullets-only)
-- [Evidence Audit](#evidence-audit)
-- [Full Theme](#full-theme)
-- [Interview Defense Pack](#interview-defense-pack)
-- [JD Tailoring](#jd-tailoring)
-- [Saved Document Package](#saved-document-package)
-- [Ownership Ladder](#ownership-ladder)
-- [Result Language](#result-language)
-- [Example Transformation](#example-transformation)
+- [只输出简历内容](#只输出简历内容)
+- [证据审计](#证据审计)
+- [完整主题](#完整主题)
+- [面试深挖包](#面试深挖包)
+- [JD 定制](#jd-定制)
+- [保存文档包](#保存文档包)
+- [个人贡献级别](#个人贡献级别)
+- [实习生适配门槛](#实习生适配门槛)
+- [结果表述](#结果表述)
+- [转换示例](#转换示例)
 
-## Bullets Only
+## 只输出简历内容
 
-Return exactly the requested count and length. Do the evidence analysis internally.
+严格遵守用户要求的数量和长度，证据分析在内部完成。
 
-Pattern:
+句式：
 
 ```text
-[ownership-safe verb] + [mechanism/contribution] + [problem addressed] + [supported result]
+[符合个人范围的动词] + [机制或贡献] + [解决的问题] + [有证据的结果]
 ```
 
-Prefer concrete nouns and verbs over stacks of technology names. If the length limit is tight, keep the distinguishing mechanism and remove generic value language first.
+优先使用具体名词和动词，不要堆叠技术名称。长度受限时，保留最能区分该亮点的机制，优先删除泛化价值描述。
 
-## Evidence Audit
+## 证据审计
 
-Use when the user has old or incomplete material:
+用户只有旧材料或不完整材料时使用：
 
 ```markdown
 ## 现在能安全写什么
-[one conservative draft or a clear statement that evidence is insufficient]
+[一份保守草稿，或者明确说明当前证据仍不足]
 
 ## 当前证据能证明什么
 - ...
@@ -46,9 +47,9 @@ Use when the user has old or incomplete material:
 3. ...
 ```
 
-Ask no more than three questions. Choose questions that can upgrade ownership, technical depth, or results; omit broad questionnaires.
+最多询问三个问题。只保留能够明确个人贡献、技术深度或结果的问题，不要发送宽泛问卷。
 
-## Full Theme
+## 完整主题
 
 ```markdown
 ## [主题]
@@ -75,6 +76,16 @@ Ask no more than three questions. Choose questions that can upgrade ownership, t
 ### 跟着一次完整任务走流程
 1. ...
 
+### 它位于完整生命周期的什么位置
+- 上游输入: ...
+- 本模块边界: ...
+- 下游结果: ...
+
+### 参与角色、制品和状态分层
+| 对象 | 负责什么或表示什么 | 与相邻对象的区别 |
+| --- | --- | --- |
+| ... | ... | ... |
+
 ### 再下钻到底层操作原理
 1. 输入/触发: ...
 2. 编排/决策: ...
@@ -83,8 +94,27 @@ Ask no more than three questions. Choose questions that can upgrade ownership, t
 5. 异常/恢复: ...
 6. 关键取舍: ...
 
+### 主要失败窗口和恢复边界
+| 失败位置 | 可能现象 | 当前处理 | 仍需谁负责 |
+| --- | --- | --- | --- |
+| ... | ... | ... | ... |
+
+### 替代方案与工程取舍
+| 方案 | 优点 | 为什么没有直接采用 |
+| --- | --- | --- |
+| ... | ... | ... |
+
 ### 为什么有含金量
 ...
+
+### 30 秒面试话术
+...
+
+### 2 分钟面试话术
+...
+
+### 10 分钟讲述顺序
+1. ...
 
 ### STAR 面试话术
 - S: ...
@@ -105,63 +135,75 @@ Ask no more than three questions. Choose questions that can upgrade ownership, t
 - ...
 ```
 
-Omit `待补充指标` when no meaningful measurement can be suggested.
+没有有意义的测量建议时省略 `待补充指标`。只有机制确实只有一个简单状态时才能省略状态表，不能为了缩短深挖文档而删除状态说明。
 
-For full-analysis and interview modes, include at least one concrete Q&A per theme. STAR does not replace this slot.
+简短完整分析中，每个主题至少包含一个具体追问。保存的面试深挖文档至少覆盖八类问题；机制足够丰富时，通常准备 12-20 个具体问题。STAR 不能替代追问部分。
 
-For a short response, omit the teaching scaffolding that would make the answer bloated. For a saved deep-dive document, keep it when the reader is an intern, beginner, or has asked for plain language.
+简短回答可以省略会造成冗长的教学结构。保存深挖文档时，如果读者是实习生、初学者或明确要求通俗解释，则应保留教学结构。
 
-### Beginner Readability Gate
+### 初学者可读性门槛
 
-- Lead with a problem and one concrete flow, not an architecture noun stack.
-- Introduce necessary terminology as `中文解释（English Term）`; prefer the Chinese phrase afterward.
-- Keep source identifiers and exact struct/function names in the evidence appendix unless they are essential to the explanation.
-- Use roughly 8-12 glossary terms per theme rather than cataloging every identifier.
-- Keep glossary definitions self-contained; do not explain `Host` as “the program using the SDK” unless `SDK` is already explained.
-- Label diagrams in the reader's language and immediately explain the path below the diagram.
-- Preserve who decides, what state changes, what survives interruption, what can fail, and what trade-off remains. “通俗” must not become generic product copy.
+- 以问题和一条具体流程开场，不要先堆架构名词；
+- 必要术语第一次写成 `中文解释（English Term）`，后续优先使用中文；
+- 除非解释确实离不开，否则源码标识、结构体和函数名放在证据附录；
+- 每个主题使用约 8-12 个核心术语，不要把所有源码标识都列入术语表；
+- 术语定义必须自洽，在解释 `Host` 前先讲清 `SDK`；
+- 图示使用读者熟悉的语言，并在图后立即解释流程；
+- 保留谁做决定、状态怎样变化、中断后保留什么、哪里会失败以及剩余取舍。“通俗”不能退化成产品宣传。
 
-Bad opening:
+不合适的开场：
 
 > Host injects IO into a Host-neutral SDK contract, then Run/Resume restores runtime-state.
 
-Better opening:
+更合适的开场：
 
 > 外层应用负责提供模型、文件和命令行能力；智能体运行底座负责按统一流程推进任务。任务暂停后，系统会读取已经保存的会话记录和运行快照，从原位置继续。源码中把这两个入口称为 `Run` 和 `Resume`。
 
-## Interview Defense Pack
+## 面试深挖包
 
-Lead with a 60-90 second STAR answer, then prepare concise answers for:
+准备四种讲述深度：
+
+- **30 秒**：问题、有限个人贡献、机制和结果；
+- **2 分钟**：完整正常流程、一个状态区别和一个失败边界；
+- **10 分钟**：生命周期位置、角色和制品、状态分层、失败窗口、替代方案、个人贡献和剩余限制；
+- **STAR**：60-90 秒故事，其中行动部分必须包含个人技术工作。
+
+然后按以下类别准备简洁回答：
 
 - 为什么不是一次普通大模型接口调用？
+- 这段机制位于完整生命周期的哪个位置？
 - 核心数据流和状态流是什么？
+- 哪些状态只在内存，哪些可以跨请求或跨进程保存？
 - 如何测试或评估？
 - 最大的失败模式是什么？
+- 正常路径、取消路径和崩溃恢复有什么不同？
+- 是否存在并发、重复请求、幂等或部分副作用问题？
 - 为什么选择这个方案而不是更简单的替代方案？
 - 哪部分是你本人负责的？
+- 哪部分属于团队平台、宿主或上下游系统？
 - 结果如何衡量，哪些指标还没有？
 
-The `Action` section must contain technical decisions and work, not only coordination verbs. When no metric exists, make `Result` a verified capability such as reproducible regression, resumable approval, or consistent replay.
+`Action` 部分必须包含技术决策和实际工作，不能只有协调类动词。没有指标时，`Result` 应写成已验证能力，例如可复现回归、可恢复审批或一致回放。
 
-## JD Tailoring
+## JD 定制
 
-First map requirements to evidence:
+先把岗位要求映射到证据：
 
-| JD requirement | Matching evidence | Strength | Resume angle |
+| JD 要求 | 对应证据 | 强度 | 简历角度 |
 | --- | --- | --- | --- |
 
-Then write only the strongest tailored bullets. List material JD gaps separately; do not fill them with adjacent technologies.
+然后只写最强的定制简历内容。把明显缺少证据的岗位要求单独列出，不要用相邻技术强行代替。
 
-Role emphasis:
+不同岗位的侧重点：
 
-- **AI Agent Engineer**: orchestration, tools, context, memory, evaluation, safety, tracing.
-- **AI Application Engineer**: user workflow, business integration, reliability, evaluation, deployment.
-- **Code Agent Engineer**: repository understanding, issue-to-patch loop, sandbox/tests, SWE-style evaluation.
-- **Backend / AI Infra**: runtime boundaries, provider abstraction, state, recovery, permissions, cost and observability.
+- **AI Agent 工程师**：编排、工具、上下文、记忆、评测、安全和链路追踪；
+- **AI 应用工程师**：用户流程、业务接入、可靠性、评测和部署；
+- **代码智能体工程师**：仓库理解、问题到补丁闭环、沙箱与测试、软件工程任务评测；
+- **后端或 AI 基础设施**：运行边界、模型提供方抽象、状态、恢复、权限、成本和可观测性。
 
-## Saved Document Package
+## 保存文档包
 
-Use a lean package:
+使用精简目录：
 
 ```text
 resume-highlight-docs/
@@ -172,24 +214,45 @@ resume-highlight-docs/
   ...
 ```
 
-`README.md` contains the index and reading order. The summary contains final bullets, project positioning, evidence status, and confirmation items. Each theme file follows the Full Theme recipe.
+`README.md` 保存索引和阅读顺序。总览文档保存最终简历内容、项目定位、证据状态和待确认项。每个主题文档遵循完整主题模板。
 
-When revising an existing package, merge or remove weak duplicates. Do not preserve stale files merely because they already exist.
+重构现有文档包时，合并薄弱重复主题，推荐阅读路径只保留入选主题。不要仅因为旧文件已经存在就继续保留。用户没有明确授权物理删除时，把淘汰文档移动到可恢复备份，而不是删除。
 
-## Ownership Ladder
+## 个人贡献级别
 
-Choose the strongest evidence-supported level:
+选择证据能够支持的最高级别：
 
-1. `主导 / 独立负责`: explicit ownership of the subsystem or workstream.
-2. `负责 X 模块 / 设计并实现 X`: specific commits, MR/PRs, tasks, or user confirmation.
-3. `参与建设 / 参与设计`: project capability is real, individual scope is partial or shared.
-4. `协助实现 / 参与联调 / 完成调研与沉淀`: support contribution.
+1. `主导 / 独立负责`：有明确子系统或工作流所有权；
+2. `负责 X 模块 / 设计并实现 X`：有具体提交、MR/PR、任务或用户确认；
+3. `参与建设 / 参与设计`：项目能力真实，但个人范围有限或与他人共享；
+4. `协助实现 / 参与联调 / 完成调研与沉淀`：支持性贡献。
 
-Do not use Git authorship alone to infer product ownership.
+不能仅根据 Git 作者信息推断产品所有权。
 
-## Result Language
+## 实习生适配门槛
 
-With verified metrics, state the metric and measurement context. Without metrics, prefer:
+对学生和实习生，要单独检查工作范围是否可信。把 `主导` 换成 `参与`，不能让过大的表述自动变得可信。
+
+每个入选主题都应回答：
+
+1. 用户具体参与了哪个有限模块、链路、实验、接入或验证任务？
+2. 用户本人完成了哪些技术动作？
+3. 哪些输入由上游团队或平台提供？
+4. 哪些下游运行、服务、产品或发布职责不属于用户？
+5. 所述工作量在实习周期内是否可信？
+6. 用户能否根据个人经历解释一个失败、一个取舍和一个验证结果？
+
+推荐结构：
+
+```text
+[团队项目背景] + [有限个人模块] + [个人技术动作] + [模块级结果] + [明确平台边界]
+```
+
+不能为了适合实习生而降低技术深度。应保留机制深度，同时把个人范围从 `完整平台` 收敛到具体质量门禁、评测实验、反馈闭环、协议适配、接入或验证职责。
+
+## 结果表述
+
+有真实指标时说明指标及统计口径；没有指标时优先使用：
 
 - 支持 / 打通 / 建立
 - 沉淀为可复现、可回归的流程
@@ -197,14 +260,14 @@ With verified metrics, state the metric and measurement context. Without metrics
 - 降低手工复现或排查成本
 - 为后续模型对比或扩展提供统一基础
 
-Avoid `显著提升`, `生产级`, `高并发`, `SOTA`, `完全自动化`, and invented percentages.
+避免使用 `显著提升`、`生产级`、`高并发`、`SOTA`、`完全自动化` 和虚构百分比。
 
-## Example Transformation
+## 转换示例
 
-Evidence: the project uses a scripted model and in-memory IO to drive the real Agent `Run/Resume` path and assert tool calls, files, events, and session state.
+证据：项目使用按剧本响应的模型替身和内存输入输出环境，驱动真实 Agent 的 `Run/Resume` 路径，并断言工具调用、文件、事件和会话状态。
 
-Defensible bullet:
+可辩护的简历表述：
 
 > 参与建设智能体场景化端到端测试体系，通过按剧本返回的模型替身与内存环境驱动真实任务启动和恢复流程，沉淀工具调用与中断恢复的可复现回归场景。
 
-Why it works: it keeps the mechanism and ownership boundary, but does not require the reader to decode `E2E Harness`, `IO`, and `Run/Resume` before understanding the contribution. Exact source terms can still appear later in the evidence section.
+这条表述保留了机制和个人边界，又不要求读者先理解 `E2E Harness`、`IO` 和 `Run/Resume` 才能知道贡献是什么。准确源码术语仍可在后续证据部分出现。

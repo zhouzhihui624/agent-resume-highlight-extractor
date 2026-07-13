@@ -1,192 +1,229 @@
 ---
 name: agent-resume-highlight-extractor
-description: Use when the user wants to extract or strengthen AI Agent/LLM engineering experience from repositories, docs, PRDs, commits, tests, prompts, traces, or project notes for a resume, internship application, project summary, STAR story, interview deep dive, or job-description tailoring, especially requests mentioning 简历亮点, 项目包装, 含金量, AI Harness, Agent evaluation, 评测, 底层原理, 面试话术, or ownership boundaries.
+description: 当用户希望从仓库、文档、PRD、提交、测试、提示词、运行轨迹或项目笔记中提取和强化 AI Agent 或大模型工程经历，用于简历、实习申请、项目总结、STAR 故事、面试深挖或岗位定制时使用。尤其适用于提到简历亮点、项目包装、含金量、AI Harness、Agent evaluation、评测、底层原理、面试话术、resume highlights 或个人贡献边界的请求。
 ---
 
-# Agent Resume Highlight Extractor
+# AI Agent 简历亮点提取器
 
-## Purpose
+## 目标
 
-Turn real project evidence into resume claims the user can defend in an interview. Treat the task as technical due diligence followed by communication, not as copywriting. Technical correctness is insufficient if the intended reader cannot follow the explanation.
+把真实项目证据转化为用户能够在面试中讲清并经得住追问的简历表述。先做技术尽职调查，再做内容表达，而不是直接进行文案包装。只有技术事实正确还不够，目标读者还必须能够循序渐进地理解。
 
-Default to Chinese unless the user requests another language. For beginner-facing Chinese output, introduce a necessary term as `中文解释（English Term）` on first use, then prefer the Chinese wording. Keep source identifiers, APIs, and model/provider names unchanged in the evidence section.
+除非用户要求其他语言，否则默认使用中文。面向初学者时，必要术语第一次出现应写成 `中文解释（English Term）`，后续优先使用中文说法。源码标识、API、模型名和提供方名称在证据部分保持原样。
 
-## Non-Negotiable Contract
+## 不可违反的原则
 
-1. Inspect available evidence before drafting claims.
-2. Separate **project capability** from **the user's contribution**. Repository presence proves the former, not the latter.
-3. Never invent ownership, implementation depth, metrics, scale, launch status, or business impact.
-4. Do not upgrade a simple LLM API integration into an Agent platform without orchestration, tools, state, evaluation, or comparable evidence.
-5. Honor explicit scope. If the user asks for only two bullets, return only two bullets after doing the necessary analysis internally.
-6. For resume packaging plus interview preparation, make each selected highlight defensible at three depths:
-   - **Resume**: concise contribution and value.
-   - **Plain-language workflow**: what happens end to end.
-   - **Implementation principle**: data/state/control flow, boundaries, failure handling, and trade-offs.
-7. Teach before naming. Do not lead with unexplained terms, acronym stacks, source identifiers, or architecture labels when the user is an intern, beginner, or explicitly asks for plain language.
-8. Plain language must preserve technical depth. Simplify the order and vocabulary, not the state flow, decision logic, recovery behavior, limitations, or trade-offs.
+1. 先检查可用证据，再起草亮点。
+2. 区分**项目具备的能力**和**用户个人贡献**。仓库里存在某项能力，只能证明前者。
+3. 不得虚构所有权、实现深度、指标、规模、上线状态或业务影响。
+4. 如果缺少编排、工具、状态、评测或相当证据，不得把普通大模型接口接入包装成 Agent 平台。
+5. 严格遵守用户要求的范围。用户只要两条简历内容时，内部完成必要分析后只返回两条。
+6. 当任务同时包含简历包装和面试准备时，每个亮点都必须支持三种深度：
+   - **简历层**：简洁说明个人贡献和价值。
+   - **通俗流程层**：完整说明一次任务怎样运行。
+   - **实现原理层**：说明数据、状态、控制流、边界、失败处理和取舍。
+7. 先教学，再命名。面对实习生、初学者或明确要求通俗解释的用户，不要以未解释术语、缩写堆叠、源码标识或架构标签开场。
+8. 通俗表达必须保留技术深度。简化的是讲解顺序和词汇，不是状态流、决策逻辑、恢复行为、限制和取舍。
+9. 对学生和实习生，应缩小**责任范围**，而不是降低技术深度。不能只把“主导”换成“参与”就保留平台级表述；必须收敛为有证据支持的模块、链路、实验、接入或验证职责，并说明周边团队边界。
 
-## Route the Request
+## 请求路由
 
-Choose one primary mode before researching:
+调研前先选择一个主要交付模式：
 
-| Observable request | Default deliverable | Load on demand |
+| 用户请求特征 | 默认交付物 | 按需读取 |
 | --- | --- | --- |
-| "only bullets", strict count/length | Exact requested bullets | `references/output-recipes.md` |
-| old docs, unclear ownership, weak evidence | Safe draft + evidence gaps + at most 3 decisive questions | `references/evidence-and-theme-guide.md` |
-| project analysis, 包装, 含金量, 4-5 亮点 | Ranked full analysis; use 2-5 themes based on evidence | Both references |
-| 面试, STAR, 底层原理, deep dive | Interview defense pack for the strongest themes | Both references |
-| save/revise a document package | Summary plus one file per strong theme | Both references |
-| "看不懂", "太多英文", "很懵", "循序渐进" | Rewrite with a beginner-readable teaching sequence; preserve evidence and depth | `references/output-recipes.md` |
-| tailor to a JD or role | Requirement-to-evidence mapping plus tailored bullets | `references/output-recipes.md` |
+| 只要简历内容、严格数量或长度 | 严格按要求返回简历内容 | `references/output-recipes.md` |
+| 旧文档、个人贡献不清或证据薄弱 | 保守草稿、证据缺口和最多 3 个关键问题 | `references/evidence-and-theme-guide.md` |
+| 项目分析、包装、含金量、4-5 个亮点 | 按证据排序的完整分析，最终保留 2-5 个主题 | 两份参考指南 |
+| 面试、STAR、底层原理、deep dive | 最强主题的面试深挖包 | 两份参考指南 |
+| 太浅、不够详细、缺少开发细节、面试会被问倒 | 包含状态分层、失败窗口、替代方案和事实边界的深挖文档 | 两份参考指南 |
+| 保存或重构文档包 | 一份总览和每个强主题各一篇文档 | 两份参考指南 |
+| 看不懂、太多英文、很懵、循序渐进 | 按初学者教学顺序重写，同时保留证据和深度 | `references/output-recipes.md` |
+| 针对 JD 或岗位定制 | 岗位要求与证据映射，以及定制简历内容 | `references/output-recipes.md` |
 
-An explicit user format overrides this table. Do not append unrequested sections "for completeness."
+用户明确指定的格式优先于此表。不要以“补充完整”为由附加用户没有要求的章节。
 
-## Workflow
+## 工作流程
 
-### 1. Establish Scope
+### 1. 明确范围
 
-Identify:
+确认以下信息：
 
-- available artifacts and repository roots
-- target role and seniority
-- requested count, length, language, and output location
-- whether the user wants bullets, understanding, interview defense, or all three
-- ownership context already supplied by the user
+- 可用材料和仓库根目录；
+- 目标岗位和资历层级；
+- 用户要求的数量、长度、语言和保存位置；
+- 用户需要简历内容、项目理解、面试准备还是三者都要；
+- 用户已经提供的个人贡献信息；
+- 拟写范围对用户资历和实习时长是否可信。
 
-Do not block when a safe partial answer is possible. If essential ownership or result information is missing, draft conservatively and ask only the questions that would materially change the wording.
+能够安全给出部分结果时，不要因为信息不全而停住。如果缺少关键个人贡献或结果信息，先保守起草，只询问真正会改变表述的关键问题。
 
-### 2. Inspect Evidence
+### 2. 检查证据
 
-Start with orientation material, then verify important claims against stronger artifacts:
+先阅读用于定位的材料，再用更强证据验证重要表述：
 
-1. project instructions, `README`, architecture docs, PRDs, and existing project-understanding docs
-2. source entry points, interfaces, prompts, schemas, configs, and migrations
-3. tests, evals, fixtures, traces, replay artifacts, CI, and benchmark reports
-4. commit history, PR/MR evidence, logs, and explicit user statements
+1. 项目说明、`README`、架构文档、PRD 和已有项目理解文档；
+2. 源码入口、接口、提示词、数据结构、配置和迁移；
+3. 测试、评测、固定样本、运行轨迹、回放产物、CI 和基准报告；
+4. 提交历史、PR/MR、日志和用户明确陈述。
 
-Inspect Chinese-named documentation directories early when present, but treat them as orientation unless corroborated. When docs and implementation disagree, use the narrower confirmed claim and state the uncertainty.
+存在中文文档目录时应尽早检查，但在得到其他证据印证前，只把它作为定位材料。文档和实现不一致时，采用范围更窄且已确认的事实，并说明不确定性。
 
-For large projects, split independent evidence families across subagents only when delegation is available and authorized. Give each agent a distinct read scope, collect raw evidence, and perform theme selection and final wording in one unifying pass.
+大型项目只有在支持委派且用户允许时才使用子 Agent。按相互独立的证据范围拆分任务，让每个子 Agent 输出已确认事实、状态时序、反例、过度表述和未知项；主题选择与最终措辞必须由主 Agent 统一完成。
 
-Read `references/evidence-and-theme-guide.md` when the project has multiple Agent/LLM subsystems, when evaluation terminology is ambiguous, or when deciding whether a mechanism is strong enough to headline.
+项目包含多个 Agent 或大模型子系统、评测术语容易混淆，或者需要判断某项机制是否足以成为主亮点时，读取 `references/evidence-and-theme-guide.md`。
 
-### 3. Build a Claim Ledger
+### 3. 建立表述台账
 
-Build this internally for every candidate highlight:
+为每个候选亮点在内部建立以下台账：
 
-| Claim component | Required question |
+| 表述组成 | 必须回答的问题 |
 | --- | --- |
-| Project fact | What observable artifact proves this exists? |
-| Mechanism | How does data, state, or control move through it? |
-| Contribution | What did the user personally design, implement, evaluate, debug, or document? |
-| Engineering value | Which reliability, quality, safety, cost, or product problem does it address? |
-| Result | What measured outcome or safely stated capability followed? |
-| Boundary | What nearby stronger claim is not proven? |
+| 项目事实 | 哪个可观察材料证明它确实存在？ |
+| 运行机制 | 数据、状态和控制如何流动？ |
+| 个人贡献 | 用户本人具体设计、实现、评测、调试或沉淀了什么？ |
+| 资历范围 | 这是否是符合目标资历的有限职责？周边哪些工作属于团队？ |
+| 工程价值 | 它解决了可靠性、质量、安全、成本还是产品问题？ |
+| 结果 | 得到了什么已测量结果或可以安全描述的能力？ |
+| 表达边界 | 哪个更强的相邻说法仍没有证据？ |
 
-Classify wording readiness:
+对表述可用性进行分类：
 
-- `可直接写`: mechanism and contribution are supported.
-- `需降级措辞`: project mechanism is supported, but ownership or impact is incomplete.
-- `需本人确认`: a specific user answer could make the claim usable.
-- `不使用`: the claim depends on guesswork or marketing language.
+- `可直接写`：机制和个人贡献都有支持；
+- `需降级措辞`：项目机制存在，但个人范围或结果不完整；
+- `需本人确认`：用户补充一个具体事实后可能可用；
+- `不使用`：表述依赖猜测或营销语言。
 
-Do not expose the full ledger unless the user asks for an evidence audit.
+除非用户要求证据审计，否则不必输出完整台账。
 
-### 4. Select Themes
+### 4. 选择主题
 
-Select **2-5 distinct themes**, not a quota. If the user asks for 4-5 but only three are defensible, return three and explain why.
+选择 **2-5 个相互独立的主题**，不要把数量当作必须填满的配额。用户要求 4-5 个但只有 3 个经得住追问时，只保留 3 个并说明原因。
 
-Rank candidates by:
+按以下维度排序：
 
-1. evidence strength
-2. technical depth and interview discussability
-3. ownership defensibility
-4. relevance to the target role
-5. distinctness from the other selected themes
+1. 证据强度；
+2. 技术深度和面试可讲性；
+3. 个人贡献可信度；
+4. 与目标岗位的相关性；
+5. 与其他候选主题的区分度；
+6. 资历和工作量可信度。
 
-Merge themes that tell the same engineering story. Prefer a smaller set of mechanisms the user can explain deeply over a broad feature inventory.
+合并讲述同一个工程故事的主题。宁可保留少量能够深入解释的机制，也不要罗列大量功能。
 
-### 5. Explain the Mechanism
+### 5. 解释运行机制
 
-For full or interview-oriented output, explain each theme without narrating source line by line:
+完整分析或面试型输出不能逐行讲源码。深度取决于机制覆盖，而不是篇幅：
 
-1. trigger/input
-2. orchestration or decision path
-3. state and persistence changes
-4. output, assertion, score, or human decision
-5. failure/recovery path
-6. why this design differs from a single LLM call
-7. one important trade-off or limitation
+1. 该机制在完整产品或运行生命周期中的位置；
+2. 参与角色、触发条件、输入、中间制品和最终输出；
+3. 编排或决策路径；
+4. 状态分层、持久化范围和不同终态的含义；
+5. 输出、断言、分数或人工决定；
+6. 至少一条主要失败恢复路径和一个部分失败窗口；
+7. 它与单次大模型调用或更简单方案的区别；
+8. 一个重要取舍、一个剩余限制和一个没有证据支持的更强说法。
 
-Name key modules, interfaces, stores, prompts, tests, or artifacts when they improve precision. If the user asks for a non-code explanation, keep identifiers in the evidence appendix rather than the main narrative.
+当一个名称掩盖了多条不同生命周期时，必须先拆开再解释。暂停位置、副作用边界、持久化、协议覆盖或终态不同的流程应使用对比表，不要因为它们属于同一产品就压成一张泛化流程图。
 
-For beginner-facing output, present that material in this teaching order:
+关键模块、接口、存储、提示词、测试和产物确实能提高准确性时可以点名。用户要求不讲代码时，把具体标识放到证据附录，不要放在主叙事中。
 
-1. state what problem exists in ordinary language
-2. use one accurate familiar analogy or minimal example to build intuition
-3. walk through the complete happy path before splitting it into components
-4. explain the control flow, state changes, failure/recovery path, and one trade-off
-5. compress the understanding into resume and interview language only after the mechanism is clear
+面向初学者时，按以下顺序教学：
 
-Use the following readability rules:
+1. 用日常语言说明问题；
+2. 用一个准确的熟悉类比或最小例子建立直觉；
+3. 先走完一条完整正常流程，再拆分组件；
+4. 解释控制流、状态变化、失败恢复和一个工程取舍；
+5. 机制讲清以后，再压缩为简历和面试话术。
 
-- Start with `读完你应该能回答什么` and `先记住三句话` for long saved theme documents.
-- Limit the glossary to roughly 8-12 terms that are necessary for the theme.
-- Explain every term at first use; do not rely on a glossary at the end to repair unexplained jargon earlier.
-- Make each glossary definition self-contained. Do not define one unfamiliar term with another undefined acronym or source identifier.
-- Prefer Chinese headings and diagram labels. After every diagram, walk through it once in natural language.
-- Avoid sentences built from several English labels such as `Host-neutral SDK contract + runtime-state + Resume`. Translate the relationship first, then add exact source names only where they help evidence or interview recall.
-- Do not force an analogy when it distorts the mechanism. A small concrete scenario is better than an inaccurate metaphor.
+遵守以下可读性规则：
 
-### 6. Draft Conservatively
+- 长篇主题文档以 `读完你应该能回答什么` 和 `先记住三句话` 开始；
+- 术语表只保留该主题必要的约 8-12 个术语；
+- 术语第一次出现时就解释，不要依赖文末术语表补救前文；
+- 每个定义必须自洽，不要用另一个未解释缩写或源码标识定义它；
+- 标题和图示优先使用中文，每张图后都要用自然语言完整走一遍；
+- 避免 `Host-neutral SDK contract + runtime-state + Resume` 这类英文标签堆叠，先用中文说明关系，再补充有助于证据定位或面试记忆的源码原词；
+- 类比会扭曲机制时不要强行使用，准确的小场景优于错误比喻。
 
-Use `contribution + mechanism + problem/value + supported result`.
+### 6. 执行事实边界审计
 
-For students and interns, default to `参与建设`, `参与设计`, `负责其中 X 模块`, or `围绕 X 完成实现/评测/文档沉淀`. Use `主导`, `独立负责全链路`, or equivalent only with explicit evidence.
+起草最终表述前，按以下维度检查每个重要事实：
 
-When metrics are absent:
+| 检查维度 | 必须区分 |
+| --- | --- |
+| 时间范围 | 正常连续流程与崩溃或重启恢复 |
+| 进程范围 | 同一次调用或同一进程，与跨进程或跨实例 |
+| 持久化 | 内存状态与耐久共享状态 |
+| 接入范围 | 内核能力与已经接入的具体协议或适配器 |
+| 原子性 | 关联编号与去重、事务或严格一次保证 |
+| 终态 | 业务回合完成与构建、评测或部署成功 |
+| 制品状态 | 草稿、候选或结果文件，与已验证版本、强制门禁或已发布制品 |
+| 当前事实 | 已实现行为与改进建议或理想设计 |
 
-- state enabled capabilities such as `支持`, `打通`, `沉淀`, `可复现`, `可回归`, or `可恢复`
-- suggest relevant metrics separately as `待补充指标`
-- never insert placeholder numbers into a directly usable bullet
+证据只支持范围更窄的一侧时，必须使用更窄的说法。例如：评审建议不等于强制门禁；阶段产物不等于成熟评测平台；稳定交互编号不等于端到端幂等；业务回合成功结束不一定代表构建成功。
 
-Existing tests prove that a behavior is covered, not that all tests currently pass. Claim a passing test run only when it was run and observed during the task.
+### 7. 保守起草
 
-Read `references/output-recipes.md` before producing structured bullets, STAR stories, JD-tailored variants, or a saved document package.
+使用 `个人贡献 + 运行机制 + 解决的问题或价值 + 有证据的结果`。
 
-## Default Full-Theme Contract
+学生和实习生默认使用 `参与建设`、`参与设计`、`负责其中 X 模块` 或 `围绕 X 完成实现、评测或文档沉淀`。只有明确证据支持时才使用 `主导`、`独立负责全链路` 等说法。可信的实习生亮点必须指出有限对象、个人技术动作和至少一个上下游团队边界，只软化动词是不够的。
 
-When the user asks for comprehensive packaging or interview preparation, populate every required slot below for each selected theme. `待补充指标` is the only optional slot.
+没有指标时：
 
-- `读完你应该能回答什么`: for long beginner-facing documents
-- `先记住三句话`: three plain-language anchors
+- 描述 `支持`、`打通`、`沉淀`、`可复现`、`可回归` 或 `可恢复` 等已形成能力；
+- 把可能补充的指标单独放在 `待补充指标`；
+- 不要在可直接使用的简历内容中插入占位数字。
+
+已有测试只能证明某项行为被覆盖，不能证明当前所有测试通过。只有本次任务实际运行并观察到成功时，才能声称测试通过。
+
+生成结构化简历内容、STAR 故事、岗位定制版本或保存文档包前，读取 `references/output-recipes.md`。
+
+## 默认完整主题要求
+
+用户要求完整包装或面试准备时，每个入选主题都要包含以下必需部分。只有 `待补充指标` 是可选项。
+
+- `读完你应该能回答什么`：用于面向初学者的长篇文档
+- `先记住三句话`：三个通俗认知锚点
 - `生活化直觉或最小例子`
-- `术语小字典`: approximately 8-12 necessary terms, Chinese-first
+- `术语小字典`：约 8-12 个必要术语，中文优先
 - `适合简历的一句话`
 - `通俗流程`
+- `完整生命周期中的位置、参与角色和制品`
+- `状态分层或关键状态变化`
 - `底层操作原理`
+- `失败窗口、恢复方式与替代方案`
 - `为什么有含金量`
+- `30 秒面试话术`
+- `2 分钟面试话术`
+- `10 分钟讲述顺序`
 - `STAR 面试话术`
-- `面试追问怎么答`: at least one likely follow-up question with a compact answer
+- `面试追问怎么答`：深挖文档至少覆盖动机、完整流程、状态、失败、恢复、并发或幂等、替代方案、限制、个人贡献和指标中的 8 类问题
 - `证据路径与表达边界`
-- `待补充指标` only when useful
+- `待补充指标`：确实有价值时才保留
 
-For evidence-poor requests, replace this contract with a safe draft, explicit unknowns, and at most three decisive questions. Do not manufacture a deep-dive section from generic Agent knowledge.
+证据薄弱时，不要强行套用完整主题模板。改为提供保守草稿、明确未知项和最多三个关键问题，不能用通用 Agent 知识虚构深挖内容。
 
-## Final Verification
+## 最终检查
 
-Before answering or saving files, confirm:
+回答或保存文件前确认：
 
-- the response matches the exact requested scope and count
-- every headline claim has evidence or is clearly marked as user-provided
-- project capability and personal ownership are not conflated
-- selected themes are distinct and strong enough to defend
-- metrics, scale, production status, and business impact were not invented
-- full/interview output covers workflow, implementation principles, STAR, and at least one follow-up Q&A per theme
-- beginner-facing output follows problem -> intuition -> full flow -> mechanism -> failure/trade-off -> interview expression
-- necessary terms are explained at first use, headings do not stack unexplained English labels, and source identifiers stay mainly in evidence sections
-- glossary definitions do not introduce a second unexplained acronym or architecture label
-- diagrams use reader-appropriate labels and are followed by a natural-language walkthrough
-- mocked runtime tests are not mislabeled as model-quality evaluation
-- evidence-poor cases ask no more than three high-value questions
-- saved packages contain no `TODO`, `TBD`, stale duplicate themes, or unreachable evidence paths
+- 输出严格符合用户要求的范围和数量；
+- 每个主表述都有证据，或者明确标记为用户提供；
+- 没有混淆项目能力和个人贡献；
+- 学生或实习生亮点收敛到可信的模块、链路、实验、接入或验证职责，没有用“参与”掩盖平台级所有权；
+- 入选主题相互独立，并且足以支撑面试；
+- 没有虚构指标、规模、生产状态和业务影响；
+- 完整或面试型输出覆盖生命周期位置、角色和制品、状态分层、流程、失败、替代方案、STAR 和用户要求的讲述深度；
+- 深挖文档包含 30 秒、2 分钟和 10 分钟版本，并覆盖多类追问，而不是只放一个象征性问题；
+- 没有把正常路径扩大成崩溃恢复，把同进程扩大成分布式恢复，或把内核能力扩大成所有协议均已接入；
+- 没有把建议写成强制执行，把候选制品写成已验证或已发布结果，或把关联编号写成严格一次保证；
+- 初学者文档遵循“问题、直觉、完整流程、机制、失败与取舍、面试表达”的顺序；
+- 必要术语第一次出现时已解释，标题没有堆叠未解释英文标签，源码标识主要位于证据部分；
+- 术语定义没有引入第二个未解释缩写或架构标签；
+- 图示使用适合读者的标签，并在图后用自然语言走一遍；
+- 没有把模拟模型的运行时测试写成真实模型质量评测；
+- 证据不足时最多询问三个高价值问题；
+- 保存的文档包不存在 `TODO`、`TBD`、过期重复主题或失效证据路径。
+
+保存中文面试深挖文档包时，运行 `scripts/validate_saved_package.sh <目录> --deep-zh`。用户明确要求不讲源码或编码过程时，再添加 `--no-code`。脚本失败代表文档必须修正，不是可忽略的风格提醒。

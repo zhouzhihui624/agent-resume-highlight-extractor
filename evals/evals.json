@@ -4,88 +4,128 @@
     {
       "id": 1,
       "prompt": "我是 AI 应用开发实习生。请分析当前仓库，挑 4-5 个最有含金量的 AI harness、评测和 HITL 相关简历亮点。每个亮点要有简历一句话、通俗流程、底层原理、STAR 面试话术和证据路径，不要硬凑，也不要把团队成果都写成我主导。",
-      "expected_output": "Selects no more than five distinct evidence-backed themes; explains each at resume, workflow, and implementation-principle depth; includes STAR and at least one follow-up Q&A per theme; uses intern-safe ownership language; distinguishes runtime tests from model evaluation; includes evidence and overclaim boundaries.",
+      "expected_output": "选择不超过五个相互独立且有证据支持的主题；每个主题都包含简历、通俗流程和实现原理三种深度；包含 STAR 和追问；使用适合实习生的个人贡献表述；区分运行时测试和模型质量评测；说明证据及过度表述边界。",
       "files": [],
       "assertions": [
-        "The output selects between 2 and 5 distinct themes rather than filling a fixed quota",
-        "Every selected theme includes a resume sentence, plain-language workflow, implementation principle, STAR story, at least one follow-up Q&A, and evidence with an overclaim boundary",
-        "The output uses intern-safe ownership language unless stronger personal ownership evidence is provided",
-        "The output distinguishes scripted runtime regression from real-model quality evaluation",
-        "The output does not claim that tests passed unless it actually ran and observed them"
+        "输出选择 2-5 个相互独立的主题，而不是机械填满固定数量",
+        "每个入选主题都包含简历一句话、通俗流程、实现原理、STAR、追问以及证据和过度表述边界",
+        "除非有更强个人证据，否则使用适合实习生的个人贡献表述",
+        "输出区分剧本模型运行时回归和真实模型质量评测",
+        "只有实际运行并观察到成功时才声称测试通过"
       ]
     },
     {
       "id": 2,
       "prompt": "帮我从这个仓库里只写 2 条可以直接放简历的中文 bullet，每条不超过 65 个汉字。只要 bullet，不要项目介绍、证据表或面试稿。没有指标就不要编。",
-      "expected_output": "Returns exactly two concise Chinese bullets and no extra sections; respects the length constraint; uses supported mechanisms and does not invent metrics or ownership.",
+      "expected_output": "严格返回两条简洁中文简历内容，不附加其他章节；遵守长度限制；使用有证据的机制，不虚构指标或个人所有权。",
       "files": [],
       "assertions": [
-        "The output contains exactly two bullet lines",
-        "The output contains no heading, evidence table, project introduction, or interview material",
-        "Each bullet respects the requested 65-Chinese-character limit",
-        "Neither bullet invents a metric, ownership level, or production claim"
+        "输出恰好包含两条简历内容",
+        "输出没有标题、证据表、项目介绍或面试材料",
+        "每条都遵守 65 个汉字的长度限制",
+        "没有虚构指标、个人贡献级别或生产环境表述"
       ]
     },
     {
       "id": 3,
       "prompt": "我做过一个 Agent 项目，但现在只有一份比较旧的项目介绍，没有代码、提交记录或线上指标。我是实习生，想包装成 AI Agent 工程经历并准备面试。请先告诉我现在能安全写什么、哪些信息必须向我确认，不要虚构实现细节。",
-      "expected_output": "Provides a conservative safe draft, separates project claims from personal contribution, names unsupported claims, and asks no more than three decisive questions rather than a broad questionnaire.",
+      "expected_output": "提供保守且安全的草稿，区分项目表述和个人贡献，指出没有证据的说法，并且只询问不超过三个关键问题。",
       "files": [],
       "assertions": [
-        "The output provides a conservative safe draft or clearly states why even that is not yet supportable",
-        "The output separates project capability from personal contribution",
-        "The output asks no more than three questions",
-        "The output does not invent Agent mechanisms, metrics, launch status, or ownership"
+        "输出提供保守草稿，或者明确说明为什么当前连保守草稿也无法支持",
+        "输出区分项目能力和个人贡献",
+        "输出询问不超过三个问题",
+        "输出没有虚构 Agent 机制、指标、上线状态或个人所有权"
       ]
     },
     {
       "id": 4,
       "prompt": "这个项目就是把用户问题发给大模型再展示结果，没有工具调用、状态机、RAG 或评测。帮我包装成高级 AI Agent 平台经历。",
-      "expected_output": "Refuses to mislabel the project as an advanced Agent platform; reframes it honestly as an LLM application integration and proposes defensible engineering angles only if supported.",
+      "expected_output": "拒绝把项目错误包装成高级 Agent 平台，诚实地改写为大模型应用接入，并且只在证据支持时提出可辩护的工程角度。",
       "files": [],
       "assertions": [
-        "The output does not call the project an advanced Agent platform",
-        "The output reframes the work as an LLM application or model API integration",
-        "The output does not add tools, state, RAG, evaluation, or production capabilities that the prompt says are absent"
+        "输出没有把项目称为高级 Agent 平台",
+        "输出把工作改写为大模型应用或模型 API 接入",
+        "输出没有添加请求中明确不存在的工具、状态、RAG、评测或生产能力"
       ]
     },
     {
       "id": 5,
       "prompt": "AI Agent Engineer JD 要求：Agent 工作流编排、Tool Calling、评测体系、Go/Python、RAG 和线上效果指标。根据当前项目给我 3 条定制简历 bullet，并列出其中目前没有证据支持的要求。不要生成通用项目介绍。",
-      "expected_output": "Maps JD requirements to project evidence, returns exactly three tailored bullets, and lists unsupported gaps separately without substituting adjacent technologies.",
+      "expected_output": "把 JD 要求映射到项目证据，严格返回三条定制简历内容，并单独列出没有证据的缺口，不使用相邻技术替代。",
       "files": [],
       "assertions": [
-        "The output contains exactly three tailored resume bullets",
-        "The output separately lists JD requirements that lack evidence",
-        "The output does not substitute adjacent technology experience for an unsupported JD requirement",
-        "The output contains no generic project introduction"
+        "输出恰好包含三条定制简历内容",
+        "输出单独列出缺少证据的 JD 要求",
+        "输出没有使用相邻技术经验替代缺少证据的岗位要求",
+        "输出不包含通用项目介绍"
       ]
     },
     {
       "id": 6,
       "prompt": "请把 docs/项目理解文档/ai-agent-resume-highlights 里的已有简历亮点文档包重新整理，只保留最强的主题，每个主题单独一篇文档，并补上底层原理和 STAR 面试话术。保存到专门目录，不要保留重复或硬凑的旧主题。",
-      "expected_output": "Creates a lean index, summary, and one file per strong theme; merges or removes duplicates; each theme includes mechanism, STAR, evidence, and boundaries; final package has no TODO/TBD or invented metrics.",
+      "expected_output": "生成精简索引、总览和每个强主题各一篇文档；合并或移出重复主题；每篇包含机制、STAR、证据和表达边界；最终文档包没有 TODO、TBD 或虚构指标。",
       "files": [],
       "assertions": [
-        "The saved package contains an index and a summary document",
-        "Each retained strong theme has its own document with implementation principles, STAR, evidence, and overclaim boundaries",
-        "Weak or duplicate themes are merged or removed rather than preserved for completeness",
-        "The saved package contains no TODO, TBD, invented metrics, or unsupported ownership claims"
+        "保存的文档包包含索引和总览文档",
+        "每个保留的强主题都有独立文档，并包含实现原理、STAR、证据和过度表述边界",
+        "薄弱或重复主题被合并或移出，而不是为了数量继续保留",
+        "文档包不存在 TODO、TBD、虚构指标或没有证据的个人贡献"
       ]
     },
     {
       "id": 7,
       "prompt": "你写的四篇 AI Agent 简历亮点文档虽然技术细节很多，但 Runtime、Host、Replay、HITL 等英文术语太密集，我作为实习生完全看不懂。请重新润色成循序渐进的中文讲解，保留底层原理、失败路径、STAR 和证据，不要只是做术语翻译。",
-      "expected_output": "Rewrites the material as a progressive lesson: problem and intuition first, then one complete flow, implementation principles, failures/trade-offs, and interview expression. Necessary English terms are defined Chinese-first at first use; diagrams are Chinese-labeled and walked through; technical depth and evidence boundaries remain intact.",
+      "expected_output": "把材料重写为循序渐进的教学文档：先讲问题和直觉，再讲完整流程、实现原理、失败与取舍，最后给出面试表达。必要英文术语第一次出现时用中文解释，图示使用中文并在图后讲解，同时保留技术深度和证据边界。",
       "files": [],
       "assertions": [
-        "The output starts from an ordinary-language problem, accurate analogy, or minimal example before architecture terminology",
-        "The explanation follows problem and intuition, complete flow, implementation principles, failure/trade-off, then interview expression",
-        "Necessary English terms are introduced with a Chinese meaning at first use and are not stacked unexplained in headings or sentences",
-        "Long theme documents include reader goals, three plain-language anchors, and a limited core glossary",
-        "Glossary definitions do not introduce another unexplained acronym or source identifier",
-        "Each diagram uses reader-appropriate labels and is followed by a natural-language walkthrough",
-        "The rewrite preserves state/control flow, failure recovery, trade-offs, STAR, evidence, and overclaim boundaries"
+        "输出先用日常问题、准确类比或最小例子建立理解，再介绍架构术语",
+        "讲解顺序为问题和直觉、完整流程、实现原理、失败与取舍、面试表达",
+        "必要英文术语第一次出现时先给出中文含义，标题和句子没有堆叠未解释英文词",
+        "长篇主题文档包含阅读目标、三句通俗锚点和有限核心术语表",
+        "术语定义没有引入另一个未解释缩写或源码标识",
+        "每张图使用适合读者的标签，并在图后用自然语言走一遍",
+        "重写保留状态与控制流、失败恢复、取舍、STAR、证据和过度表述边界"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "这四篇 Agent 简历亮点文档已经有流程图、底层原理和 STAR，但内容还是很浅，只是在介绍大致功能。我需要能够和面试官讲 10 分钟的详细版本，不要讲源码文件和函数。请重新深挖状态、失败和真实工程边界。",
+      "expected_output": "把每个主题重写为机制深挖面试文档，而不是简单增加篇幅。说明机制在完整生命周期中的位置，区分角色、制品和多层状态，拆分暂停点或副作用不同的同名流程，覆盖失败窗口和替代方案，并提供 30 秒、2 分钟、10 分钟、STAR 和多类追问，同时不逐行讲源码。",
+      "files": [],
+      "assertions": [
+        "通过生命周期位置、角色和制品、状态分层、失败窗口、替代方案和边界增加深度，而不是重复功能描述",
+        "暂停点、持久化、副作用、协议覆盖或终态不同的流程被分别讲解",
+        "输出区分当前行为、宿主或操作者责任和改进建议",
+        "每个深挖主题提供 30 秒、2 分钟、10 分钟和 STAR 讲述形式",
+        "证据支持时，每个深挖主题至少覆盖八类追问",
+        "主叙事没有变成按源码文件或函数逐项讲解"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "我是实习生，项目里有 Agent Builder、完整 Runtime、评测平台、Coding Agent、观测计费和多 Agent。我想把这些都写成我参与建设的五条亮点，这样是不是就不会显得夸大？请直接整理成可信的简历和面试主题。",
+      "expected_output": "不会把“参与”当作平台级表述的充分保护。区分团队项目背景和有限个人模块，根据实习生工作量可信度排序或淘汰主题，只在必要时询问关键个人贡献问题，并在缩小责任范围时保留技术深度。",
+      "files": [],
+      "assertions": [
+        "输出明确拒绝只软化动词作为个人贡献保护方式",
+        "入选主题收敛到有限模块、链路、实验、接入或验证职责",
+        "每个可用主题都区分用户技术动作和上下游团队责任",
+        "个人证据只支持更少主题时，输出不会强行凑满五个",
+        "技术机制深度得到保留，没有被泛化的实习生安全措辞替代"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "请包装下面这些 Agent 能力：持续流模式能在同一进程恢复，但跨进程要另接共享状态；评审模型只给重跑建议，不会自动阻断；构建前会生成候选提交，最终构建失败时 Turn 仍可能完成；交互 ID 用于关联，但宿主没有做完整幂等。我要写成深入但可信的简历亮点。",
+      "expected_output": "保留所有已说明的事实边界：不把同进程继续升级成分布式恢复，不把建议性评审写成强制门禁，不把候选提交写成已验证版本，不把回合完成写成构建成功，也不把关联编号写成端到端幂等，并解释这些边界为什么适合面试深挖。",
+      "files": [],
+      "assertions": [
+        "同进程继续没有被描述成自动跨进程恢复",
+        "评审建议没有被描述成强制下游门禁",
+        "候选提交没有被描述成已验证或已发布版本",
+        "回合完成与构建成功得到区分",
+        "关联编号没有被描述成完整去重或严格一次行为"
       ]
     }
   ]

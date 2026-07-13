@@ -1,162 +1,222 @@
-# Evidence and Theme Guide
+# 证据与主题筛选指南
 
-Read this reference when a project contains several AI/Agent subsystems, when evaluation terminology is ambiguous, or when candidate highlights must be ranked.
+项目包含多个 AI 或 Agent 子系统、评测术语容易混淆，或者需要给候选亮点排序时读取本指南。
 
-## Contents
+## 目录
 
-- [Evidence Strength](#evidence-strength)
-- [Evaluation Taxonomy](#evaluation-taxonomy)
-- [High-Value Theme Map](#high-value-theme-map)
-- [Deep-Dive Checklist](#deep-dive-checklist)
-- [Candidate Ranking](#candidate-ranking)
-- [Metrics to Ask For, Not Invent](#metrics-to-ask-for-not-invent)
+- [证据强度](#证据强度)
+- [评测分类](#评测分类)
+- [评测可信度审计](#评测可信度审计)
+- [高价值主题地图](#高价值主题地图)
+- [深挖检查清单](#深挖检查清单)
+- [事实边界审计](#事实边界审计)
+- [候选主题排序](#候选主题排序)
+- [实习生范围可信度](#实习生范围可信度)
+- [只能询问不能虚构的指标](#只能询问不能虚构的指标)
 
-## Evidence Strength
+## 证据强度
 
-Use evidence for the claim it can actually support:
+每类证据只能支持它真正能够证明的表述：
 
-| Evidence | Usually supports | Does not prove by itself |
+| 证据 | 通常能够支持 | 单独不能证明 |
 | --- | --- | --- |
-| source, interfaces, schemas, prompts | implemented mechanism | personal ownership or production use |
-| focused tests and scenarios | intended and covered behavior | current pass status unless tests were run |
-| traces, replay artifacts, eval reports | observed execution or evaluation process | broad business impact |
-| architecture docs and PRDs | intended design and scope | completed implementation |
-| commits and PR/MR history | contribution to specific changes | sole ownership of the whole subsystem |
-| logs and dashboards | observed runtime behavior | causality without comparison |
-| explicit user statement | personal scope or context | independent technical verification |
+| 源码、接口、数据结构、提示词 | 已实现机制 | 个人所有权或生产使用情况 |
+| 聚焦测试和场景 | 预期且已覆盖的行为 | 当前通过状态，除非本次实际运行 |
+| 轨迹、回放产物、评测报告 | 已观察到的执行或评测过程 | 广泛业务影响 |
+| 架构文档和 PRD | 设计意图和范围 | 已完成实现 |
+| 提交和 PR/MR 历史 | 对具体改动的贡献 | 独立拥有整个子系统 |
+| 日志和仪表盘 | 已观察到的运行行为 | 缺少对照时的因果关系 |
+| 用户明确陈述 | 个人范围或背景 | 独立技术验证 |
 
-If one sentence mixes several claim types, verify each part separately.
+一句话混合多类表述时，必须分别验证每一部分。
 
-## Evaluation Taxonomy
+## 评测分类
 
-Do not collapse every test into "大模型评测."
+不要把所有测试都统称为“大模型评测”。
 
-| Evaluation layer | Main question | Typical controls and artifacts | Safe resume framing |
+| 评测层级 | 核心问题 | 常见控制和产物 | 安全简历表述 |
 | --- | --- | --- | --- |
-| Runtime contract | Does the Agent loop behave correctly? | scripted/fake LLM, in-memory IO, tool assertions, event/session checks | scenario E2E or regression harness |
-| Model/task quality | Does a model complete the task well? | fixed task start, replay, golden set, graders, final artifacts, traces | offline eval, replay, benchmark |
-| Safety/HITL | Are risky actions blocked, reviewed, and resumed correctly? | permission cases, interrupt state, approval/denial scenarios, audit events | safety/HITL evaluation harness |
-| Multi-agent quality | Do role-separated agents improve review or execution? | isolated contexts, schemas, convergence rules, false-positive review | multi-agent review/eval workflow |
-| Product/business outcome | Does the system help users or operations? | task success, human acceptance, latency, cost, retention, time saved | online/product impact, only with data |
+| 运行时契约 | Agent 循环行为是否正确？ | 剧本模型或模型替身、内存输入输出、工具断言、事件和会话检查 | 场景端到端测试或回归框架 |
+| 模型或任务质量 | 模型能否高质量完成任务？ | 固定任务起点、回放、黄金样本、评审器、最终产物和轨迹 | 离线评测、回放或基准测试 |
+| 安全与人工介入 | 高风险动作是否被正确阻止、审核和恢复？ | 权限案例、中断状态、批准拒绝场景和审计事件 | 安全或人工介入评测框架 |
+| 多 Agent 质量 | 角色隔离是否改善评审或执行？ | 隔离上下文、结构化协议、收敛规则和误报复核 | 多 Agent 评审或评测流程 |
+| 产品或业务结果 | 系统是否真正帮助用户或运营？ | 任务成功、人工接受、延迟、成本、留存和节省时间 | 只有真实数据时才能写线上或业务影响 |
 
-A deterministic scripted LLM is valuable because it removes model variance and exposes runtime regressions. It does not measure the quality of a real model.
+确定性的剧本模型能够消除模型波动并暴露运行时回归，因此很有价值，但它不能衡量真实模型质量。
 
-## High-Value Theme Map
+## 评测可信度审计
 
-Start with these themes when evidence exists. Use the mechanism questions to distinguish real engineering from labels.
+呈现评测主题前，应根据真实证据回答以下问题，而不是照搬理想评测架构：
 
-### Agent Runtime or Harness
+| 审计范围 | 必须回答的问题 | 常见过度表述 |
+| --- | --- | --- |
+| 样本捕获 | 任务怎样捕获、排除和重建？哪些失败从未进入数据集？ | 把现有产物当成有代表性的基准集 |
+| 时间切点 | 首次产出前有哪些信息，哪些反馈后来才出现？ | 把未来反馈泄漏到早期计划比较 |
+| 比较对象 | 实际比较了多少源产物和重新生成产物？ | 把不同基线或实验条件合并成一个标签 |
+| 输入抽取 | 是否检查用户证据的遗漏、编造和时间顺序？ | 把有损摘要当成真实标准答案 |
+| 门禁执行 | 评审结果会阻断下游，还是只建议重跑或人工复核？ | 把建议性输出写成自动质量门禁 |
+| 评审偏差 | 是否隐藏来源、交换顺序、重复评审或使用人工校准？ | 把一次大模型评审当成客观真值 |
+| 可复现性 | 是否记录代码起点、模型、预算、提示词、规则、随机设置和产物指纹？ | 把一次性运行写成可复现实验 |
+| 聚合能力 | 是否真正实现批次清单、置信区间、排名和校准？ | 把独立阶段文件写成成熟评测平台 |
 
-Look for:
+明确区分三类说法：
 
-- model/tool loop, `Run`/`Resume`, session and runtime state
-- host-injected IO, provider, storage, permission, event, or background interfaces
-- streaming events, interruption, recovery, background work
+- `当前行为`：由实现或已观察产物确认；
+- `操作者责任`：当前阶段或工具外部仍需完成；
+- `改进建议`：更强但尚未证明已经实现的设计。
 
-Explain:
+## 高价值主题地图
 
-- what the runtime owns versus what the host injects
-- how one turn moves through model output, tool execution, persistence, and terminal state
-- what is required to resume safely after an interrupt
+证据存在时优先从以下主题寻找亮点，并通过机制问题区分真实工程能力和空泛标签。
 
-Avoid claiming a distributed or production-scale platform from an embeddable runtime alone.
+### Agent 运行底座或执行框架
 
-### Scenario E2E or Regression Harness
+重点寻找：
 
-Look for:
+- 模型与工具循环、`Run`/`Resume`、会话状态和运行状态；
+- 由宿主注入的输入输出、模型提供方、存储、权限、事件或后台接口；
+- 流式事件、中断、恢复和后台任务。
 
-- scenario declarations, scripted responses, fake/model fixtures
-- in-memory filesystem, shell, session store, queues, clock, or event sinks
-- assertions over requests, tool calls, files, events, messages, and resume behavior
+需要讲清：
 
-Explain which nondeterministic boundaries are controlled and which real runtime path remains under test.
+- 运行底座负责什么，宿主注入什么；
+- 一次回合怎样经过模型输出、工具执行、持久化并进入终态；
+- 中断后安全恢复需要哪些条件。
 
-### Replay or Offline Evaluation
+不能仅凭可嵌入运行底座就声称实现了分布式或生产规模平台。
 
-Look for:
+### 场景端到端测试或回归框架
 
-- captured code/data starting point, conversation context, prompts, environment, model config
-- deterministic reconstruction, context truncation, replay entry point
-- final artifacts, traces, acceptance criteria, graders, or comparison reports
+重点寻找：
 
-Explain how the system creates a fair same-start comparison. Do not claim automated scoring when the repository only captures or extracts evaluation inputs.
+- 场景声明、剧本响应和模型替身；
+- 内存文件系统、命令环境、会话存储、队列、时钟或事件接收器；
+- 对请求、工具调用、文件、事件、消息和恢复行为的断言。
 
-### Safety, Permission, and HITL
+说明哪些不确定边界被控制，以及哪条真实运行路径仍然接受测试。
 
-Look for:
+### 回放或离线评测
 
-- ordered permission rules, risk classification, allow/ask/deny decisions
-- pending approval state, interrupt events, resolution APIs, resume logic
-- duplicate-side-effect protection and approval/denial tests
+重点寻找：
 
-Explain decision order, persistence, resumption, and the limits of any classifier. Do not claim complete prompt-injection prevention or exactly-once execution without proof.
+- 捕获的代码或数据起点、对话上下文、提示词、环境和模型配置；
+- 确定性重建、上下文截断和回放入口；
+- 最终产物、轨迹、验收标准、评审器或对比报告。
 
-### Multi-Agent Review or Collaboration
+说明系统怎样建立公平的同起点比较。仓库只捕获或提取评测输入时，不能声称已经具备自动评分。
 
-Look for:
+### 安全、权限和人工介入
 
-- role definitions, context isolation, tool restrictions, structured output
-- parallel dispatch, aggregation, priority rules, re-review, convergence limits
-- false-positive handling or human arbitration
+重点寻找：
 
-Explain why separate agents are used instead of repeated identical calls. Distinguish prompt/skill-driven orchestration from a standalone workflow engine.
+- 有顺序的权限规则、风险分类和允许、询问、拒绝决定；
+- 待审批状态、中断事件、决定回注接口和恢复逻辑；
+- 防重复副作用机制以及批准拒绝测试。
 
-### Tool Calling and External Actions
+说明决策顺序、持久化、恢复和分类器限制。没有证据时，不得声称完全防止提示词注入或严格一次执行。
 
-Look for registries, schemas, validation, permissions, timeout/retry behavior, result normalization, and audit events. A list of tools is weaker than a controlled execution contract.
+### 多 Agent 评审或协作
 
-### Context, Memory, and Retrieval
+重点寻找：
 
-Look for prompt assembly, history selection, context budgets, compaction, cache behavior, retrieval indexes, reranking, citations, and memory lifecycle. Explain what is selected, when, and how it reaches the model.
+- 角色定义、上下文隔离、工具限制和结构化输出；
+- 并行派发、聚合、优先级规则、复审和收敛上限；
+- 误报处理或人工仲裁。
 
-### Model and Provider Infrastructure
+说明为什么使用角色隔离的 Agent，而不是重复相同调用。区分由提示词或 Skill 驱动的编排和独立工作流引擎。
 
-Look for routing, capability registries, wire translation, streaming, reasoning/thinking filtering, fallback, token accounting, and cost attribution. Separate SDK-level portable concepts from provider-specific fields.
+### 工具调用和外部动作
 
-### Code Agent Automation
+寻找工具注册、数据结构、校验、权限、超时重试、结果标准化和审计事件。仅有工具列表远弱于受控执行契约。
 
-Look for issue understanding, repository retrieval, static analysis, patch generation, sandbox execution, test feedback, review, and issue-to-patch evaluation. Do not infer SWE-bench performance from a compatible workflow.
+### 上下文、记忆和检索
 
-### Observability and Cost
+寻找提示词组装、历史选择、上下文预算、压缩、缓存、检索索引、重排、引用和记忆生命周期。说明选择了什么、何时选择以及怎样进入模型。
 
-Look for trace/span creation, request/tool timelines, token and cost records, model metadata, latency metrics, replay/debug links, and failure classification. Logs alone are not an observability system unless they support diagnosis or measurement.
+### 模型与提供方基础设施
 
-## Deep-Dive Checklist
+寻找模型路由、能力注册、协议转换、流式调用、推理内容过滤、降级、Token 统计和成本归因。区分 SDK 层通用概念和提供方专属字段。
 
-For interview preparation, be able to answer:
+### Coding Agent 自动化
 
-1. What triggers the mechanism?
-2. Which data enters and what artifact leaves?
-3. Where is state stored, and what survives a restart or resume?
-4. Which component makes each decision?
-5. How are nondeterministic dependencies controlled or observed?
-6. What happens on timeout, rejection, partial failure, or malformed model output?
-7. Which alternative was simpler, and why was it insufficient here?
-8. What limitation remains?
+寻找问题理解、仓库检索、静态分析、补丁生成、沙箱执行、测试反馈、评审以及问题到补丁评测。不能仅凭兼容流程推断 SWE-bench 成绩。
 
-## Candidate Ranking
+### 可观测性与成本
 
-Score internally from 0-2 on each dimension:
+寻找链路和跨度、请求与工具时间线、Token 和成本记录、模型元数据、延迟指标、回放调试链接和失败分类。日志只有能够支持诊断或测量时，才构成可观测能力。
 
-- `E`: evidence strength
-- `D`: mechanism depth
-- `O`: ownership defensibility
-- `R`: target-role relevance
+## 深挖检查清单
 
-Prefer themes totaling at least 6 with `E > 0`. Treat this as a prioritization aid, not as proof. A lower-scoring but user-owned module can outrank a broad platform capability with unknown ownership.
+面试准备必须能够回答：
 
-## Metrics to Ask For, Not Invent
+1. 该机制位于完整生命周期的什么位置？
+2. 什么会触发它，有哪些角色参与？
+3. 输入哪些数据，产生哪些中间制品，最终输出什么？
+4. 有哪些状态层，不同终态分别回答什么问题？
+5. 状态保存在哪里，同一次调用、重启、恢复或跨实例接管后分别能保留什么？
+6. 每个决定由哪个组件作出，哪些决定属于宿主或操作者？
+7. 不确定依赖怎样被控制或观察？
+8. 超时、拒绝、取消、部分失败、模型输出异常或崩溃时会发生什么？
+9. 哪些流程共享一个名称，但暂停点、副作用、持久化或协议支持不同？
+10. 哪个替代方案更简单，为什么在这里不够？
+11. 仍有哪些限制，哪个更强说法没有证据？
+12. 用户本人具体做了什么，哪些仍属于团队或平台职责？
 
-Suggest only metrics that match the mechanism:
+## 事实边界审计
 
-| Theme | Useful metrics |
+机制涉及运行状态、恢复、评测、构建、发布或外部副作用时，必须执行此审计。
+
+| 证据能够证明 | 不得暗中升级为 |
 | --- | --- |
-| scenario harness | scenario count, critical flows covered, flakes removed, regressions caught |
-| replay/offline eval | replay success rate, task count, models compared, grader agreement |
-| HITL | approval/denial counts, resume success, risky-call interception, classifier escalation |
-| multi-agent review | findings accepted, false-positive rate, convergence rounds, review time |
-| runtime/tooling | tool success rate, recovery success, timeout/error rate, task completion |
-| model/provider | latency, token/cost per task, fallback rate, provider error rate |
-| product workflow | human acceptance, completion time, task success, repeat usage |
+| 能在持续进程中运行 | 能跨进程重启或跨实例接管 |
+| 存在运行状态结构 | 已正确配置并维护耐久共享存储 |
+| 内核回注接口接受编号 | 已执行未知编号、类型、过期、鉴权和重复检查 |
+| 能复用先前结果内容 | 冻结了完整执行上下文或保证严格一次执行 |
+| 评审器返回接受、重跑或复核 | 下游阶段会被自动阻断 |
+| 保存阶段 JSON 和轨迹 | 已具备批次聚合、校准、置信区间和排名 |
+| 已创建候选提交 | 候选已通过构建、发布或成为稳定版本 |
+| 用户回合完成 | 构建、预览、评测或部署成功 |
+| 正常循环允许 N 次重试 | N 已持久化并在所有崩溃恢复路径中强制执行 |
+| 平台内部错误是结构化的 | 模型收到相同且完整的结构化对象 |
 
-Keep missing metrics outside directly usable bullets under `待补充指标`.
+相邻说法具有不同成立条件时，应同时保留。这个边界本身往往就是最有价值的面试细节。
+
+## 候选主题排序
+
+每个维度在内部打 0-2 分：
+
+- `E`：证据强度；
+- `D`：机制深度；
+- `O`：个人贡献可信度；
+- `R`：目标岗位相关性；
+- `I`：资历和工作量可信度。
+
+优先选择总分至少为 8，且 `E > 0`、`I > 0` 的主题。评分只用于排序，不是事实证明。用户明确负责的较小模块，可以优先于个人范围不明的广泛平台能力。
+
+## 实习生范围可信度
+
+`I` 按以下标准评分：
+
+| 分数 | 含义 |
+| --- | --- |
+| 0 | 表述覆盖平台或子系统，但没有有限个人动作和团队边界 |
+| 1 | 能看到可信模块，但个人动作、持续时间或所有权仍需确认 |
+| 2 | 证据或用户确认明确指出有限模块、具体技术工作和周边责任 |
+
+对实习生，优先选择能够深入解释的质量门禁、实验、反馈闭环、协议适配、接入或验证职责，而不是多个平台级表述。明确证据支持较大真实贡献时，不应机械降级；资历只是可信度检查，不是自动降低所有权。
+
+## 只能询问不能虚构的指标
+
+只建议与机制匹配的指标：
+
+| 主题 | 有用指标 |
+| --- | --- |
+| 场景回归框架 | 场景数量、关键流程覆盖、偶发失败消除、捕获回归数量 |
+| 回放或离线评测 | 回放成功率、任务数、对比模型数、评审一致性 |
+| 人工介入 | 批准拒绝数量、恢复成功率、高风险调用拦截、分类器升级人工比例 |
+| 多 Agent 评审 | 发现采纳量、误报率、收敛轮次、评审时间 |
+| 运行底座或工具 | 工具成功率、恢复成功率、超时错误率、任务完成率 |
+| 模型或提供方 | 延迟、单任务 Token 和成本、降级率、提供方错误率 |
+| 产品流程 | 人工接受率、完成时间、任务成功率、重复使用率 |
+
+缺失指标只能放在 `待补充指标`，不能写进可直接使用的简历内容。

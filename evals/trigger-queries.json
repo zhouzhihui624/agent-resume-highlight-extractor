@@ -32,6 +32,14 @@
     "should_trigger": true
   },
   {
+    "query": "之前生成的 Agent 简历亮点太浅了，请补齐状态机、失败窗口和 10 分钟面试深挖内容。",
+    "should_trigger": true
+  },
+  {
+    "query": "我是实习生，这几个 Agent 平台亮点怎么缩小到可信的个人模块贡献？",
+    "should_trigger": true
+  },
+  {
     "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
     "should_trigger": false
   },
