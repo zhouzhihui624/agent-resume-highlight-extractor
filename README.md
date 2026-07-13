@@ -29,7 +29,8 @@
 将仓库放到 Codex Skills 目录：
 
 ```bash
-git clone <repository-url> ~/.codex/skills/agent-resume-highlight-extractor
+git clone https://github.com/zhouzhihui624/agent-resume-highlight-extractor.git \
+  ~/.codex/skills/agent-resume-highlight-extractor
 ```
 
 重新打开 Codex 会话后，通过 Skill 名称显式调用，或者直接提出与项目亮点、简历包装和面试准备相关的请求。
