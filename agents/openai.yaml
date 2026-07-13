@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Agent Resume Highlights"
+  short_description: "Build defensible AI/LLM resume and interview stories"
+  default_prompt: "Use $agent-resume-highlight-extractor to inspect the project evidence, select only defensible AI/Agent highlights, and explain them progressively in beginner-readable language without inventing ownership or metrics."

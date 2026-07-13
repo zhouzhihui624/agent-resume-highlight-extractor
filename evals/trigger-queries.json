@@ -1,0 +1,66 @@
+[
+  {
+    "query": "分析这个 Go Agent SDK，帮我提炼实习简历里的 AI Harness 和评测亮点。",
+    "should_trigger": true
+  },
+  {
+    "query": "我负责过一部分大模型应用开发，怎么包装得有含金量但不会在面试里被问倒？",
+    "should_trigger": true
+  },
+  {
+    "query": "从这些 commits 和测试里找出能写进 AI Agent Engineer 简历的贡献。",
+    "should_trigger": true
+  },
+  {
+    "query": "把这几个 Agent 项目亮点写成 STAR 面试话术，还要解释底层实现原理。",
+    "should_trigger": true
+  },
+  {
+    "query": "这份项目理解文档已经旧了，请核对代码并重做简历亮点。",
+    "should_trigger": true
+  },
+  {
+    "query": "Tailor my LLM evaluation project experience to this AI application engineer job description.",
+    "should_trigger": true
+  },
+  {
+    "query": "我是实习生，不确定哪些是团队成果。请帮我划分 ownership 并写安全的简历 bullet。",
+    "should_trigger": true
+  },
+  {
+    "query": "只从 replay、trace 和 HITL 里挑两个最值得面试深挖的项目点。",
+    "should_trigger": true
+  },
+  {
+    "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
+    "should_trigger": false
+  },
+  {
+    "query": "Review this pull request for bugs in the permission engine.",
+    "should_trigger": false
+  },
+  {
+    "query": "解释一下这个仓库的 Agent loop 是怎么运行的，不需要简历或面试内容。",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我写一份普通前端开发简历，项目经历我稍后再补。",
+    "should_trigger": false
+  },
+  {
+    "query": "总结这份 PRD 的功能范围和接口变更。",
+    "should_trigger": false
+  },
+  {
+    "query": "设计一个新的 LLM-as-judge 自动评测模块并实现。",
+    "should_trigger": false
+  },
+  {
+    "query": "根据上面的经验修改 agent-resume-highlight-extractor 这个 Skill。",
+    "should_trigger": false
+  },
+  {
+    "query": "为招聘团队写一份 AI Agent Engineer 的职位描述。",
+    "should_trigger": false
+  }
+]

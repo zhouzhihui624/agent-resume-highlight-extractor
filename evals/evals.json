@@ -1,0 +1,92 @@
+{
+  "skill_name": "agent-resume-highlight-extractor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我是 AI 应用开发实习生。请分析当前仓库，挑 4-5 个最有含金量的 AI harness、评测和 HITL 相关简历亮点。每个亮点要有简历一句话、通俗流程、底层原理、STAR 面试话术和证据路径，不要硬凑，也不要把团队成果都写成我主导。",
+      "expected_output": "Selects no more than five distinct evidence-backed themes; explains each at resume, workflow, and implementation-principle depth; includes STAR and at least one follow-up Q&A per theme; uses intern-safe ownership language; distinguishes runtime tests from model evaluation; includes evidence and overclaim boundaries.",
+      "files": [],
+      "assertions": [
+        "The output selects between 2 and 5 distinct themes rather than filling a fixed quota",
+        "Every selected theme includes a resume sentence, plain-language workflow, implementation principle, STAR story, at least one follow-up Q&A, and evidence with an overclaim boundary",
+        "The output uses intern-safe ownership language unless stronger personal ownership evidence is provided",
+        "The output distinguishes scripted runtime regression from real-model quality evaluation",
+        "The output does not claim that tests passed unless it actually ran and observed them"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "帮我从这个仓库里只写 2 条可以直接放简历的中文 bullet，每条不超过 65 个汉字。只要 bullet，不要项目介绍、证据表或面试稿。没有指标就不要编。",
+      "expected_output": "Returns exactly two concise Chinese bullets and no extra sections; respects the length constraint; uses supported mechanisms and does not invent metrics or ownership.",
+      "files": [],
+      "assertions": [
+        "The output contains exactly two bullet lines",
+        "The output contains no heading, evidence table, project introduction, or interview material",
+        "Each bullet respects the requested 65-Chinese-character limit",
+        "Neither bullet invents a metric, ownership level, or production claim"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我做过一个 Agent 项目，但现在只有一份比较旧的项目介绍，没有代码、提交记录或线上指标。我是实习生，想包装成 AI Agent 工程经历并准备面试。请先告诉我现在能安全写什么、哪些信息必须向我确认，不要虚构实现细节。",
+      "expected_output": "Provides a conservative safe draft, separates project claims from personal contribution, names unsupported claims, and asks no more than three decisive questions rather than a broad questionnaire.",
+      "files": [],
+      "assertions": [
+        "The output provides a conservative safe draft or clearly states why even that is not yet supportable",
+        "The output separates project capability from personal contribution",
+        "The output asks no more than three questions",
+        "The output does not invent Agent mechanisms, metrics, launch status, or ownership"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "这个项目就是把用户问题发给大模型再展示结果，没有工具调用、状态机、RAG 或评测。帮我包装成高级 AI Agent 平台经历。",
+      "expected_output": "Refuses to mislabel the project as an advanced Agent platform; reframes it honestly as an LLM application integration and proposes defensible engineering angles only if supported.",
+      "files": [],
+      "assertions": [
+        "The output does not call the project an advanced Agent platform",
+        "The output reframes the work as an LLM application or model API integration",
+        "The output does not add tools, state, RAG, evaluation, or production capabilities that the prompt says are absent"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "AI Agent Engineer JD 要求：Agent 工作流编排、Tool Calling、评测体系、Go/Python、RAG 和线上效果指标。根据当前项目给我 3 条定制简历 bullet，并列出其中目前没有证据支持的要求。不要生成通用项目介绍。",
+      "expected_output": "Maps JD requirements to project evidence, returns exactly three tailored bullets, and lists unsupported gaps separately without substituting adjacent technologies.",
+      "files": [],
+      "assertions": [
+        "The output contains exactly three tailored resume bullets",
+        "The output separately lists JD requirements that lack evidence",
+        "The output does not substitute adjacent technology experience for an unsupported JD requirement",
+        "The output contains no generic project introduction"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "请把 docs/项目理解文档/ai-agent-resume-highlights 里的已有简历亮点文档包重新整理，只保留最强的主题，每个主题单独一篇文档，并补上底层原理和 STAR 面试话术。保存到专门目录，不要保留重复或硬凑的旧主题。",
+      "expected_output": "Creates a lean index, summary, and one file per strong theme; merges or removes duplicates; each theme includes mechanism, STAR, evidence, and boundaries; final package has no TODO/TBD or invented metrics.",
+      "files": [],
+      "assertions": [
+        "The saved package contains an index and a summary document",
+        "Each retained strong theme has its own document with implementation principles, STAR, evidence, and overclaim boundaries",
+        "Weak or duplicate themes are merged or removed rather than preserved for completeness",
+        "The saved package contains no TODO, TBD, invented metrics, or unsupported ownership claims"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "你写的四篇 AI Agent 简历亮点文档虽然技术细节很多，但 Runtime、Host、Replay、HITL 等英文术语太密集，我作为实习生完全看不懂。请重新润色成循序渐进的中文讲解，保留底层原理、失败路径、STAR 和证据，不要只是做术语翻译。",
+      "expected_output": "Rewrites the material as a progressive lesson: problem and intuition first, then one complete flow, implementation principles, failures/trade-offs, and interview expression. Necessary English terms are defined Chinese-first at first use; diagrams are Chinese-labeled and walked through; technical depth and evidence boundaries remain intact.",
+      "files": [],
+      "assertions": [
+        "The output starts from an ordinary-language problem, accurate analogy, or minimal example before architecture terminology",
+        "The explanation follows problem and intuition, complete flow, implementation principles, failure/trade-off, then interview expression",
+        "Necessary English terms are introduced with a Chinese meaning at first use and are not stacked unexplained in headings or sentences",
+        "Long theme documents include reader goals, three plain-language anchors, and a limited core glossary",
+        "Glossary definitions do not introduce another unexplained acronym or source identifier",
+        "Each diagram uses reader-appropriate labels and is followed by a natural-language walkthrough",
+        "The rewrite preserves state/control flow, failure recovery, trade-offs, STAR, evidence, and overclaim boundaries"
+      ]
+    }
+  ]
+}
