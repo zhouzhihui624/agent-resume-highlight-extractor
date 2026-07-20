@@ -1,4 +1,4 @@
 interface:
   display_name: "AI Agent 简历亮点提取"
-  short_description: "生成可信、适合实习生的 AI 项目与面试亮点"
-  default_prompt: "使用 $agent-resume-highlight-extractor 检查项目证据，把学生或实习生的个人贡献收敛到可信模块，并从生命周期、状态、失败、取舍和面试表达等角度深入讲解入选亮点，不虚构指标。"
+  short_description: "把 AI 项目证据整理成有主线、能讲透的实习面试故事"
+  default_prompt: "使用 $agent-resume-highlight-extractor 检查项目证据，先还原工程问题并确认我的有限贡献，再把最强亮点整理成一条有主角、有因果、有三个设计锚点且能逐层展开的面试故事，不虚构指标或所有权。"

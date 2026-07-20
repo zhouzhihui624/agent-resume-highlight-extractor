@@ -40,6 +40,14 @@
     "should_trigger": true
   },
   {
+    "query": "这篇项目亮点文档内容很多但没有主线，看完记不住，帮我改成能连续回答面试官的故事。",
+    "should_trigger": true
+  },
+  {
+    "query": "不要再堆流程、状态和术语了，请把 Agent 项目经历整理成有主体性的 10 分钟面试讲法。",
+    "should_trigger": true
+  },
+  {
     "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
     "should_trigger": false
   },
