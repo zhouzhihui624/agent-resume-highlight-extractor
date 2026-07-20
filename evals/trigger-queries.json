@@ -40,6 +40,14 @@
     "should_trigger": true
   },
   {
+    "query": "我是实习生，不用确认是不是我做的，仓库里合适的模块直接帮我包装成工作经历。",
+    "should_trigger": true
+  },
+  {
+    "query": "把这些 Agent 机制的指标价值和上线效果也包装进简历，但别硬编具体数字。",
+    "should_trigger": true
+  },
+  {
     "query": "这篇项目亮点文档内容很多但没有主线，看完记不住，帮我改成能连续回答面试官的故事。",
     "should_trigger": true
   },
