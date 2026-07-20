@@ -56,6 +56,10 @@
     "should_trigger": true
   },
   {
+    "query": "新版亮点文档主线清楚了但技术细节丢了，我最终只保留一个文档，请整合成能讲也能深挖的版本。",
+    "should_trigger": true
+  },
+  {
     "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
     "should_trigger": false
   },
