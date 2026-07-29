@@ -60,6 +60,10 @@
     "should_trigger": true
   },
   {
+    "query": "这篇 Agent 亮点只讲结果和价值，没有说明代码具体怎么实现，请根据仓库补全实现链路、状态变化和失败恢复。",
+    "should_trigger": true
+  },
+  {
     "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
     "should_trigger": false
   },
