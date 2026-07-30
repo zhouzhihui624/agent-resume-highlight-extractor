@@ -3,7 +3,7 @@
 set -u
 
 usage() {
-  printf '用法: %s <文档目录> [--deep-zh] [--no-code]\n' "$0" >&2
+  printf '用法: %s <文档目录> [--deep-zh] [--no-code] [--theme-glob <文件模式>]\n' "$0" >&2
 }
 
 if [[ $# -lt 1 ]]; then
@@ -15,13 +15,23 @@ doc_dir=$1
 shift
 deep_zh=false
 no_code=false
+theme_glob='0[1-9]-*.md'
 
-for arg in "$@"; do
-  case "$arg" in
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --deep-zh) deep_zh=true ;;
     --no-code) no_code=true ;;
+    --theme-glob)
+      shift
+      if [[ $# -eq 0 ]]; then
+        usage
+        exit 2
+      fi
+      theme_glob=$1
+      ;;
     *) usage; exit 2 ;;
   esac
+  shift
 done
 
 if [[ ! -d "$doc_dir" ]]; then
@@ -91,38 +101,71 @@ if [[ -f "$doc_dir/README.md" ]]; then
 fi
 
 if [[ "$no_code" == true ]]; then
-  if rg -n '\.(go|ts|tsx|js|py)\b|/internal/|func[[:space:]]' "${files[@]}" >/dev/null; then
-    fail "要求不讲代码的文档包中仍存在源码路径或实现标识"
-  fi
+  for file in "${files[@]}"; do
+    source_tour_line=$(
+      awk '
+        /^(```|~~~)/ {
+          in_fence = !in_fence
+          next
+        }
+        /^#{1,6}[[:space:]]/ {
+          match($0, /^#+/)
+          level = RLENGTH
+          if (in_evidence && level <= evidence_level) {
+            in_evidence = 0
+            evidence_level = 0
+          }
+          if ($0 ~ /(证据|验证|源码定位|代码定位|实现定位|Evidence)/) {
+            in_evidence = 1
+            evidence_level = level
+          }
+        }
+        !in_fence && !in_evidence && ($0 ~ /\.(go|ts|tsx|js|py)(:[0-9]+)?([^A-Za-z0-9_]|$)/ || $0 ~ /\/internal\// || $0 ~ /(^|[[:space:]])func[[:space:]]/ || $0 ~ /[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z_][A-Za-z0-9_]*\(/) {
+          print NR
+          exit
+        }
+      ' "$file"
+    )
+    if [[ -n "$source_tour_line" ]]; then
+      fail "$(basename "$file"):$source_tour_line 在证据章节之外出现源码路径或实现标识"
+    fi
+  done
 fi
 
 if [[ "$deep_zh" == true ]]; then
   themes=()
   while IFS= read -r -d '' file; do
     themes+=("$file")
-  done < <(find "$doc_dir" -maxdepth 1 -type f -name '0[1-9]-*.md' -print | sort | mapfile_compat)
+  done < <(find "$doc_dir" -maxdepth 1 -type f -name "$theme_glob" -print | sort | mapfile_compat)
 
   if [[ ${#themes[@]} -eq 0 ]]; then
-    fail "没有找到编号主题文档"
+    fail "没有找到匹配 $theme_glob 的正式主题文档"
   fi
 
-  required_patterns=(
-    '^#{2,3} 一句话讲清'
-    '^#{2,3} 这项工作解决了什么问题'
-    '^#{2,3} (我的任务和团队边界|项目职责拆分与待确认项)'
-    '^#{2,3} 先记住三个设计锚点'
-    '^#{2,3} 跟着一次任务走完整主线'
-    '^#{2,3} 三个关键设计为什么这样做'
-    '^#{2,3} 失败时怎么办'
-    '^#{2,3} 结果、含金量和事实边界'
-    '^#{2,3} 面试怎么连续讲'
-    '^#{2,3} 追问附录'
+  required_concepts=(
+    '整体方法或完整流程|^#{2,3}[[:space:]].*(整体方法|整体流程|完整流程|方法总览|一次任务)'
+    '具体实现步骤|^#{2,3}[[:space:]].*(怎样实现|如何实现|详细实现|拆解实现|实现步骤|三个实现|方法细节|关键设计)'
+    '失败、取舍或事实边界|^#{2,3}[[:space:]].*(失败|异常|取舍|事实边界)'
+    '验证或证据|^#{2,3}[[:space:]].*(验证|证明|证据)'
+    '简历或面试表达|^#{2,3}[[:space:]].*(简历|面试|STAR|快速复习)'
+    '深挖问题或追问|^#{2,3}[[:space:]].*(追问|深挖|高频问题)'
   )
 
   for file in "${themes[@]}"; do
-    for pattern in "${required_patterns[@]}"; do
+    if ! sed -n '1,100p' "$file" | rg -q '(具体问题|工程问题|痛点|场景|目标|记忆句|一句话)'; then
+      fail "$(basename "$file") 开头缺少具体问题或故事主张"
+    fi
+
+    mermaid_count=$(rg -c '^(```|~~~)mermaid[[:space:]]*$' "$file" || true)
+    if [[ "$mermaid_count" -lt 1 ]]; then
+      fail "$(basename "$file") 缺少整体方法图"
+    fi
+
+    for concept in "${required_concepts[@]}"; do
+      label=${concept%%|*}
+      pattern=${concept#*|}
       if ! rg -q "$pattern" "$file"; then
-        fail "$(basename "$file") 缺少深挖文档章节: $pattern"
+        fail "$(basename "$file") 缺少语义章节: $label"
       fi
     done
 
@@ -134,4 +177,9 @@ if [[ "$errors" -gt 0 ]]; then
   exit 1
 fi
 
-printf '校验通过: %s 中共 %d 份 Markdown 文档\n' "$doc_dir" "${#files[@]}"
+if [[ "$deep_zh" == true ]]; then
+  printf '校验通过: %s 中共 %d 份 Markdown 文档，其中 %d 份正式主题匹配 %s\n' \
+    "$doc_dir" "${#files[@]}" "${#themes[@]}" "$theme_glob"
+else
+  printf '校验通过: %s 中共 %d 份 Markdown 文档\n' "$doc_dir" "${#files[@]}"
+fi

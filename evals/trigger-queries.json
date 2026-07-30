@@ -64,6 +64,10 @@
     "should_trigger": true
   },
   {
+    "query": "亮点文档流程图重复、术语看不懂，而且关键实现只在面试追问里才出现，请按普通程序员能快速复习的方式重写。",
+    "should_trigger": true
+  },
+  {
     "query": "给 Agent runtime 的 Resume 逻辑补几个单元测试。",
     "should_trigger": false
   },
